@@ -55,12 +55,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         inMemoryUserDetailsManager.createUser(userDetails_2);
         auth.userDetailsService(inMemoryUserDetailsManager);
     }*/
-
+/*
     @Bean
     public UserDetailsService userDetailsService(DataSource dataSource){
         return new JdbcUserDetailsManager(dataSource);
     }
-
+*/
     @Bean
     public PasswordEncoder passwordEncoder(){
         return NoOpPasswordEncoder.getInstance();
