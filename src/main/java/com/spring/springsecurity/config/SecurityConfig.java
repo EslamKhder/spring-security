@@ -15,7 +15,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         });
         http.formLogin();
         http.httpBasic();*/
-        http.authorizeRequests().anyRequest().authenticated()
+        /*http.authorizeRequests().anyRequest().permitAll()
+                .and().formLogin().and().httpBasic();*/
+
+        http.authorizeRequests()
+                .antMatchers("/football/*").authenticated()
+                .antMatchers("/basketball/*").authenticated()
+                .antMatchers("/swimming/*").authenticated()
+                .antMatchers("/subscribers/*").authenticated()
+                .antMatchers("/about/*").permitAll()
+                .antMatchers("/connect/*").permitAll()
                 .and().formLogin().and().httpBasic();
     }
 }
