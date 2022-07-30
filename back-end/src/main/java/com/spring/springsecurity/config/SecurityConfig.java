@@ -1,6 +1,9 @@
 package com.spring.springsecurity.config;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.sql.DataSource;
+
+import java.util.Collections;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +19,8 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
 
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -32,7 +37,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         /*http.authorizeRequests().anyRequest().denyAll()
                 .and().formLogin().and().httpBasic();*/
-        http.authorizeRequests()
+        http.cors().configurationSource(new CorsConfigurationSource() {
+            @Override
+            public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
+                CorsConfiguration config = new CorsConfiguration();
+                config.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
+                config.setAllowedMethods(Collections.singletonList("*"));
+                config.setAllowCredentials(true);
+                config.setAllowedHeaders(Collections.singletonList("*"));
+                config.setMaxAge(2500L);
+                return config;
+            }
+        }).and()
+                .authorizeRequests()
                 .antMatchers("/football/*").authenticated()
                 .antMatchers("/basketball/*").authenticated()
                 .antMatchers("/swimming/*").authenticated()

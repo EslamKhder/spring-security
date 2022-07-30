@@ -15,7 +15,8 @@ export class PlayerService {
     let header = new HttpHeaders({
       Authorization: basicAuthHeaderString
     })
-    return this.http.get<any>(`http://localhost:8080/football/start`,{headers : header}).pipe(
+    // @ts-ignore
+    return this.http.get<any>(`http://localhost:8080/football/start`,{headers : header,responseType: 'text'}).pipe(
       map(
         response => {
           console.log(response)
