@@ -50,7 +50,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 return config;
             }
        // }).and().csrf().disable()
-        }).and().csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+        }).and().csrf().ignoringAntMatchers("/other/*").csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 .and()
                 .authorizeRequests()
                 .antMatchers("/football/*").authenticated()
@@ -59,6 +59,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/subscribers/*").authenticated()
                 .antMatchers("/about/*").permitAll()
                 .antMatchers("/connect/*").permitAll()
+                .antMatchers("/other/*").permitAll()
                 .and().formLogin().and().httpBasic();
     }
     /*@Override
