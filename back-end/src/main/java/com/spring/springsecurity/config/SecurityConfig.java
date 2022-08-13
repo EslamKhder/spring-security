@@ -55,7 +55,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/football/*").hasAuthority("WRITE")
                 .antMatchers("/basketball/*").hasAuthority("READ")
-                .antMatchers("/swimming/*").hasAuthority("LISTEN")
+                .antMatchers("/swimming/*").hasAnyAuthority("LISTEN","READ")
                 .antMatchers("/subscribers/*").hasAuthority("DELETE")
                 .antMatchers("/about/*").permitAll()
                 .antMatchers("/connect/*").permitAll()
