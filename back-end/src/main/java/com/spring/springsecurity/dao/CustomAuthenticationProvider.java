@@ -36,7 +36,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         String userName = authentication.getName(); // true
         String password = authentication.getCredentials().toString();
         List<Subscriber> subscribers = subscriberRepo.findByEmail(userName);
-
+        System.out.println(subscribers.size());
         if(subscribers.isEmpty()){
             throw new BadCredentialsException("Invalid User you must be register");
         } else {
