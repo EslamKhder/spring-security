@@ -14,6 +14,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import com.spring.springsecurity.model.Authority;
 import com.spring.springsecurity.model.Subscriber;
 import com.spring.springsecurity.model.SubscriberSecurity;
 
@@ -40,13 +41,21 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
             throw new BadCredentialsException("Invalid User you must be register");
         } else {
             if (passwordEncoder.matches(password,subscribers.get(0).getPassword())){
-                List<GrantedAuthority> authorityList = new ArrayList<>();
-                authorityList.add(new SimpleGrantedAuthority(subscribers.get(0).getRole()));
-                return new UsernamePasswordAuthenticationToken(userName,password,authorityList);
+                //List<GrantedAuthority> authorityList = new ArrayList<>();
+               // authorityList.add(new SimpleGrantedAuthority(subscribers.get(0).getRole()));
+                return new UsernamePasswordAuthenticationToken(userName,password,getAuthority(subscribers.get(0).getAuthorities()));
             } else {
                 throw new BadCredentialsException("Invalid Password");
             }
         }
+    }
+
+    private List<SimpleGrantedAuthority> getAuthority(List<Authority> authorityList){
+        List<SimpleGrantedAuthority> simpleGrantedAuthorities = new ArrayList<>();
+        for (Authority authority: authorityList){ //
+            simpleGrantedAuthorities.add(new SimpleGrantedAuthority(authority.getName()));
+        }
+        return simpleGrantedAuthorities;
     }
 
     @Override

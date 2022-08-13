@@ -52,19 +52,6 @@
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
   </component>
   <component name="RunManager">
-    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="CLASS" />
-      <properties />
-      <listeners />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="SpringSecurityApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
       <module name="spring-security" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.spring.springsecurity.SpringSecurityApplication" />
@@ -83,6 +70,7 @@
       <updated>1657236549037</updated>
       <workItem from="1657236550864" duration="49859000" />
       <workItem from="1659207781534" duration="2691000" />
+      <workItem from="1660396486479" duration="204000" />
     </task>
     <task id="LOCAL؜٠٠٠٠١" summary="spring security mul login">
       <created>1657239001016</created>
