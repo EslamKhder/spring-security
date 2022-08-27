@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
@@ -15,6 +16,8 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
+import com.spring.springsecurity.filters.FilterAfter;
+import com.spring.springsecurity.filters.FilterAt;
 import com.spring.springsecurity.filters.FilterBefore;
 
 @Configuration
@@ -32,7 +35,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         /*http.authorizeRequests().anyRequest().denyAll()
                 .and().formLogin().and().httpBasic();*/
-        http.cors().configurationSource(new CorsConfigurationSource() {
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+          .and()
+         .cors().configurationSource(new CorsConfigurationSource() {
             @Override
             public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
                 CorsConfiguration config = new CorsConfiguration();
@@ -44,8 +49,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 return config;
             }
        // }).and().csrf().disable()
-        }).and().csrf().ignoringAntMatchers("/other/*").csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                .and().addFilterBefore(new FilterBefore(), BasicAuthenticationFilter.class)
+       // }).and().csrf().ignoringAntMatchers("/other/*").csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+        }).and().csrf().disable()
+                .addFilterBefore(new FilterBefore(), BasicAuthenticationFilter.class)
+                .addFilterAfter(new FilterAfter(),BasicAuthenticationFilter.class)
+                .addFilterAt(new FilterAt(),BasicAuthenticationFilter.class)
                 .authorizeRequests()
                 .antMatchers("/football/*").hasRole("USER")
                 .antMatchers("/basketball/*").hasRole("ADMIN")

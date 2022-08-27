@@ -9,10 +9,10 @@ import java.io.IOException;
 
 import org.springframework.core.annotation.Order;
 
-public class FilterBefore implements Filter {
+public class FilterAfter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        System.out.println("Inside Filter Before");
+        System.out.println("Inside Filter After");
         filterChain.doFilter(servletRequest,servletResponse);
     }
 }
