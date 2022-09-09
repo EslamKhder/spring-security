@@ -21,6 +21,7 @@ import com.spring.springsecurity.filters.FilterAfter;
 import com.spring.springsecurity.filters.FilterAt;
 import com.spring.springsecurity.filters.FilterBefore;
 import com.spring.springsecurity.filters.JWTTokenFilter;
+import com.spring.springsecurity.filters.JWTValidationFilter;
 
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -57,6 +58,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilterBefore(new FilterBefore(), BasicAuthenticationFilter.class)
                 .addFilterAfter(new FilterAfter(),BasicAuthenticationFilter.class)
                 .addFilterAfter(new JWTTokenFilter(),BasicAuthenticationFilter.class)
+                .addFilterBefore(new JWTValidationFilter(),BasicAuthenticationFilter.class)
                 .addFilterAt(new FilterAt(),BasicAuthenticationFilter.class)
                 .authorizeRequests()
                 .antMatchers("/football/*").hasRole("USER")
