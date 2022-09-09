@@ -2,6 +2,7 @@ package com.spring.springsecurity.config;
 
 import javax.servlet.http.HttpServletRequest;
 
+import java.util.Arrays;
 import java.util.Collections;
 
 import org.springframework.context.annotation.Bean;
@@ -19,6 +20,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import com.spring.springsecurity.filters.FilterAfter;
 import com.spring.springsecurity.filters.FilterAt;
 import com.spring.springsecurity.filters.FilterBefore;
+import com.spring.springsecurity.filters.JWTTokenFilter;
 
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -45,6 +47,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 config.setAllowedMethods(Collections.singletonList("*"));
                 config.setAllowCredentials(true);
                 config.setAllowedHeaders(Collections.singletonList("*"));
+                config.setExposedHeaders(Arrays.asList("Authorization"));
                 config.setMaxAge(2500L);
                 return config;
             }
@@ -53,12 +56,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         }).and().csrf().disable()
                 .addFilterBefore(new FilterBefore(), BasicAuthenticationFilter.class)
                 .addFilterAfter(new FilterAfter(),BasicAuthenticationFilter.class)
+                .addFilterAfter(new JWTTokenFilter(),BasicAuthenticationFilter.class)
                 .addFilterAt(new FilterAt(),BasicAuthenticationFilter.class)
                 .authorizeRequests()
                 .antMatchers("/football/*").hasRole("USER")
                 .antMatchers("/basketball/*").hasRole("ADMIN")
                 .antMatchers("/swimming/*").hasRole("MANAGER")
                 .antMatchers("/subscribers/*").hasAnyRole("ADMIN","MANAGER")
+                .antMatchers("/login").authenticated()
                 .antMatchers("/about/*").permitAll()
                 .antMatchers("/connect/*").permitAll()
                 .antMatchers("/other/*").permitAll()

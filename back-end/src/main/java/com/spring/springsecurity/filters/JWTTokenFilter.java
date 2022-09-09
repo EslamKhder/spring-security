@@ -26,19 +26,23 @@ import com.spring.springsecurity.constans.SecurityConstant;
 public class JWTTokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        if(authentication != null){
-            SecretKey secretKey = Keys.hmacShaKeyFor(SecurityConstant.KEY.getBytes(StandardCharsets.UTF_8));
-            String jwt = Jwts.builder().setSubject("Jwt Token")
-                            .claim("email",authentication.getName())
-                            .claim("authorities",authorities(authentication.getAuthorities()))
-                            .setIssuedAt(new Date()) // 2022/8/27 7:00
-                            .setExpiration(new Date((new Date().getTime() + 30000)))//
-                            .signWith(secretKey).compact();
-            response.setHeader(SecurityConstant.HEADER,jwt);
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (authentication != null) {
+                SecretKey secretKey = Keys.hmacShaKeyFor(SecurityConstant.KEY.getBytes(StandardCharsets.UTF_8));
+                String jwt = Jwts.builder().setSubject("Jwt Token")
+                        .claim("email", authentication.getName())
+                        .claim("authorities", authorities(authentication.getAuthorities()))
+                        .setIssuedAt(new Date()) // 2022/8/27 7:00
+                        .setExpiration(new Date((new Date().getTime() + 30000)))//2022/8/27 7:00 30s
+                        .signWith(secretKey).compact();
+                response.setHeader(SecurityConstant.HEADER, jwt);
+            }
+        } catch (Exception e) {
+            System.out.println(e.toString());
         }
-        filterChain.doFilter(request,response);
+
+        filterChain.doFilter(request, response);
     }
 
     // filter     login ✔
@@ -46,7 +50,7 @@ public class JWTTokenFilter extends OncePerRequestFilter {
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         // NO Filter      true
         // NO Filter      false     -> filter
-        return !request.getServletPath().equals("/login"); //
+        return !request.getServletPath().equals("/user"); //
         //  /user     true
         //  /login   false
     }
